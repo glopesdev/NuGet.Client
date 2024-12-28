@@ -10,6 +10,7 @@ namespace NuGet.Protocol
         public static readonly string Version300rc = "/3.0.0-rc";
         public static readonly string Version300 = "/3.0.0";
         public static readonly string Version340 = "/3.4.0";
+        public static readonly string Version350 = "/3.5.0";
         public static readonly string Version360 = "/3.6.0";
         public static readonly string Versioned = "/Versioned";
         public static readonly string Version470 = "/4.7.0";
@@ -20,7 +21,7 @@ namespace NuGet.Protocol
         internal const string Version6110 = "/6.11.0";
         internal const string Version6130 = "/6.13.0";
 
-        public static readonly string[] SearchQueryService = { "SearchQueryService" + Versioned, "SearchQueryService" + Version340, "SearchQueryService" + Version300beta };
+        public static readonly string[] SearchQueryService = { "SearchQueryService" + Versioned, "SearchQueryService" + Version350, "SearchQueryService" + Version300beta };
         public static readonly string[] RegistrationsBaseUrl = { $"RegistrationsBaseUrl{Versioned}", $"RegistrationsBaseUrl{Version360}", $"RegistrationsBaseUrl{Version340}", $"RegistrationsBaseUrl{Version300rc}", $"RegistrationsBaseUrl{Version300beta}", "RegistrationsBaseUrl" };
         public static readonly string[] SearchAutocompleteService = { "SearchAutocompleteService" + Versioned, "SearchAutocompleteService" + Version300beta };
         public static readonly string[] ReportAbuse = { "ReportAbuseUriTemplate" + Versioned, "ReportAbuseUriTemplate" + Version300 };

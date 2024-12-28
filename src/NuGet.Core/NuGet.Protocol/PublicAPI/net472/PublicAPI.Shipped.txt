@@ -267,8 +267,6 @@ NuGet.Protocol.Core.Types.SearchFilter.IncludeDelisted.set -> void
 NuGet.Protocol.Core.Types.SearchFilter.IncludePrerelease.get -> bool
 NuGet.Protocol.Core.Types.SearchFilter.OrderBy.get -> NuGet.Protocol.Core.Types.SearchOrderBy?
 NuGet.Protocol.Core.Types.SearchFilter.OrderBy.set -> void
-~NuGet.Protocol.Core.Types.SearchFilter.PackageTypes.get -> System.Collections.Generic.IEnumerable<string>
-~NuGet.Protocol.Core.Types.SearchFilter.PackageTypes.set -> void
 NuGet.Protocol.Core.Types.SearchFilter.SearchFilter(bool includePrerelease) -> void
 NuGet.Protocol.Core.Types.SearchFilter.SearchFilter(bool includePrerelease, NuGet.Protocol.Core.Types.SearchFilterType? filter) -> void
 ~NuGet.Protocol.Core.Types.SearchFilter.SupportedFrameworks.get -> System.Collections.Generic.IEnumerable<string>

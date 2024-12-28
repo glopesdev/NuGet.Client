@@ -55,9 +55,9 @@ namespace NuGet.Protocol.Core.Types
         public bool IncludeDelisted { get; set; } = false;
 
         /// <summary>
-        /// Restrict the search to certain package types.
+        /// Restrict the search to a specific package type.
         /// </summary>
-        public IEnumerable<string> PackageTypes { get; set; } = Enumerable.Empty<string>();
+        public string PackageType { get; set; } = null;
 
         /// <summary>
         /// The optional filter type. Absense of this value indicates that all versions should be returned.

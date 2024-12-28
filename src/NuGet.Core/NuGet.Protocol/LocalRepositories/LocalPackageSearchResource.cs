@@ -60,18 +60,14 @@ namespace NuGet.Protocol
                 }
 
                 // Filter on package types
-                if (filters?.PackageTypes != null
-                    && filters.PackageTypes.Any())
+                if (!string.IsNullOrEmpty(filters.PackageType))
                 {
-                    foreach (var packageTypeName in filters.PackageTypes)
-                    {
-                        query = query
-                            .Where(package => package.Nuspec
-                                .GetPackageTypes()
-                                .Any(packageType => StringComparer.OrdinalIgnoreCase.Equals(
-                                    packageType.Name,
-                                    packageTypeName)));
-                    }
+                    query = query
+                        .Where(package => package.Nuspec
+                            .GetPackageTypes()
+                            .Any(packageType => StringComparer.OrdinalIgnoreCase.Equals(
+                                packageType.Name,
+                                filters.PackageType)));
                 }
 
                 // Collapse to the highest version per id, if necessary

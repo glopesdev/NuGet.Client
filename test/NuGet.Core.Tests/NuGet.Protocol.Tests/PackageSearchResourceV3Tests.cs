@@ -130,7 +130,7 @@ namespace NuGet.Protocol.Tests
 
             var searchFilter = new SearchFilter(includePrerelease: false)
             {
-                PackageTypes = new[] { "test" }
+                PackageType = "test"
             };
 
             // Act

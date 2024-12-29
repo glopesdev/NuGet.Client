@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using NuGet.Common;
+using NuGet.Packaging.Core;
 using NuGet.Protocol.Core.Types;
 using NuGet.Protocol.Tests.Plugins.Helpers;
 using NuGet.Test.Utility;
@@ -211,7 +212,7 @@ namespace NuGet.Protocol.Tests
                             <description>package description</description>
                             <tags>apple orange</tags>
                             <packageTypes>
-                              <packageType name=""test"" />
+                              <packageType name=""Dependency"" />
                             </packageTypes>
                         </metadata>
                         </package>");
@@ -226,7 +227,7 @@ namespace NuGet.Protocol.Tests
                 var nuspec2 = XDocument.Parse($@"<?xml version=""1.0"" encoding=""utf-8""?>
                         <package>
                         <metadata>
-                            <id>myOtherPackage</id>
+                            <id>myPackageWithoutPackageType</id>
                             <version>1.0.0-alpha.1.3+5</version>
                             <description>package description</description>
                             <tags>grape</tags>
@@ -235,15 +236,36 @@ namespace NuGet.Protocol.Tests
 
                 var packageA2 = new SimpleTestPackageContext()
                 {
-                    Id = "myOtherPackage",
+                    Id = "myPackageWithoutPackageType",
                     Version = "1.0.0-alpha.1.3+5",
                     Nuspec = nuspec2
+                };
+
+                var nuspec3 = XDocument.Parse($@"<?xml version=""1.0"" encoding=""utf-8""?>
+                        <package>
+                        <metadata>
+                            <id>myOtherPackage</id>
+                            <version>1.0.0-alpha.1.3+5</version>
+                            <description>package description</description>
+                            <tags>grape</tags>
+                            <packageTypes>
+                              <packageType name=""test"" />
+                            </packageTypes>
+                        </metadata>
+                        </package>");
+
+                var packageA3 = new SimpleTestPackageContext()
+                {
+                    Id = "myOtherPackage",
+                    Version = "1.0.0-alpha.1.3+5",
+                    Nuspec = nuspec3
                 };
 
                 var packageContexts = new SimpleTestPackageContext[]
                 {
                     packageA,
-                    packageA2
+                    packageA2,
+                    packageA3
                 };
 
                 await SimpleTestPackageUtility.CreatePackagesAsync(root, packageContexts);
@@ -253,7 +275,7 @@ namespace NuGet.Protocol.Tests
 
                 var filter = new SearchFilter(includePrerelease: true)
                 {
-                    PackageType = "test"
+                    PackageType = PackageType.Dependency.Name
                 };
 
                 // Act
@@ -267,12 +289,10 @@ namespace NuGet.Protocol.Tests
                         .OrderBy(p => p.Identity.Id)
                         .ToList();
 
-                var package = packages.First();
-
                 // Assert
-                Assert.Equal(1, packages.Count);
-                Assert.Equal("myPackage", package.Identity.Id);
-                Assert.Equal("1.0.0-alpha.1.2+5", package.Identity.Version.ToFullString());
+                Assert.Equal(2, packages.Count);
+                Assert.Equal("myPackage", packages[0].Identity.Id);
+                Assert.Equal("1.0.0-alpha.1.2+5", packages[0].Identity.Version.ToFullString());
             }
         }
 

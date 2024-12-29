@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
+using NuGet.Packaging.Core;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
 
@@ -62,12 +63,7 @@ namespace NuGet.Protocol
                 // Filter on package types
                 if (!string.IsNullOrEmpty(filters.PackageType))
                 {
-                    query = query
-                        .Where(package => package.Nuspec
-                            .GetPackageTypes()
-                            .Any(packageType => StringComparer.OrdinalIgnoreCase.Equals(
-                                packageType.Name,
-                                filters.PackageType)));
+                    query = query.Where(package => MatchesPackageType(package, filters.PackageType));
                 }
 
                 // Collapse to the highest version per id, if necessary
@@ -86,6 +82,23 @@ namespace NuGet.Protocol
                     .Select(package => CreatePackageSearchResult(package, filters, log, token))
                     .ToArray();
             }, token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+        }
+
+        /// <summary>
+        /// Search package types to match specified filter. If no package types are provided,
+        /// accept package as long as the specified filter type is Dependency.
+        /// </summary>
+        private static bool MatchesPackageType(LocalPackageInfo package, string packageTypeName)
+        {
+            var packageTypes = package.Nuspec.GetPackageTypes();
+            if (packageTypes.Count == 0
+                && PackageType.PackageTypeNameComparer.Equals(packageTypeName, PackageType.Dependency.Name))
+            {
+                return true;
+            }
+
+            return packageTypes
+                .Any(packageType => PackageType.PackageTypeNameComparer.Equals(packageType.Name, packageTypeName));
         }
 
         /// <summary>
